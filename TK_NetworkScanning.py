@@ -44,7 +44,8 @@ class Network_Test(Tk):
 
         mainframe = ttk.Frame(self, padding=(3, 3, 12, 12),
                               borderwidth=2, relief='sunken')
-
+        
+        self.iconbitmap(".\\app_ico.ico")
         mainframe.grid(column=0, row=0, sticky="nwes")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
