@@ -25,9 +25,9 @@ cmd切换到项目目录运行`python TK_NetworkScanning.py`
 - [x] 导出扫描结果
 - [ ] 实时显示测试IP网络延迟
 
-##运行展示
-![单个网段IP地址扫描](https://raw.githubusercontent.com/Toykang/NetworkScanning/master/Doc_Image/IP_test.png)
-![自定义文本文件内IP地址扫描](https://raw.githubusercontent.com/Toykang/NetworkScanning/master/Doc_Image/txt_IP_test.png)
+## 运行展示
+![单个网段IP地址扫描](https://raw.githubusercontent.com/Toykang/NetworkScanning/master/Doc_Image/IP_test.PNG)
+![自定义文本文件内IP地址扫描](https://raw.githubusercontent.com/Toykang/NetworkScanning/master/Doc_Image/txt_IP_test.PNG)
 
 ## LICENSE
 MIT License
