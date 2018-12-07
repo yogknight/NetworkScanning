@@ -352,6 +352,8 @@ class ALL_IPtest(ttk.Frame):
             self, text="开始扫描", image=self.go_img, compound='left')
         self.Out_ScanningTxt = ttk.Button(
             self, text="导出结果", image=self.outFile_img, compound='left', command=lambda: self.save_view())
+        self.Clean_ScanningTxt = ttk.Button(
+            self, text="清空", command=lambda: self.cleane_view())
         self.TestView = ttk.Label(
             self, text='扫描结果：', font=TITLE_FONT, foreground='#1296db')
 
@@ -375,6 +377,8 @@ class ALL_IPtest(ttk.Frame):
                               columnspan=1, rowspan=1, padx=5, pady=5)
         self.Out_ScanningTxt.grid(
             column=20, row=20, sticky="nwes", columnspan=1, rowspan=1, padx=5, pady=5)
+        self.Clean_ScanningTxt.grid(
+            column=1, row=20, sticky="nwes", columnspan=1, rowspan=1, padx=5, pady=5)
         self.TestView.grid(column=1, row=2, sticky="nwes", padx=5, pady=5)
 
     # 获取IP
@@ -451,6 +455,8 @@ class ALL_IPtest(ttk.Frame):
                 f.write("|  {0}  |   4    |   通信失败  |\n".format(ip))
                 f.write("+---------------+----------+----------+\n")
                 self.Scanning_L.update()
+    def cleane_view(self):
+        self.Scanning_L.delete('0', 'end')
 
     def save_view(self):
         r = asksaveasfilename(
