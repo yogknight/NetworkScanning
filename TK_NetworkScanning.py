@@ -20,7 +20,7 @@ img_ALL_IPimg = Image.open('ALL_IP_img.png')
 img_infile = Image.open('infile_img.png')
 img_outFile = Image.open('outFile_img.png')
 img_go = Image.open('go_img.png')
-img_one_IPtes=Image.open('one_IPtest_img.png')
+img_one_IPtes = Image.open('one_IPtest_img.png')
 
 # 定义图片尺寸
 about_image = img_about.resize((60, 60), Image.ANTIALIAS)
@@ -46,7 +46,7 @@ class Network_Test(Tk):
 
         mainframe = ttk.Frame(self, padding=(3, 3, 12, 12),
                               borderwidth=2, relief='sunken')
-        self.resizable(width=False, height=False)#禁止拉升窗口
+        self.resizable(width=False, height=False)  # 禁止拉升窗口
         self.iconbitmap(".\\app_ico.ico")
         mainframe.grid(column=0, row=0, sticky="nwes")
         self.columnconfigure(0, weight=1)
@@ -101,9 +101,8 @@ class StartPage(ttk.Frame):
                                command=lambda: mainframe.show_frame("Network_scan"))
         menu_tools.add_command(label='自定义扫描(Auto Test)',
                                command=lambda: mainframe.show_frame("ALL_IPtest"))
-        
 
-        #单个地址测试
+        # 单个地址测试
         self.one_IPtest_img = ImageTk.PhotoImage(one_IPtest_image)
         self.IPtest = ttk.Label(self, text='IP地址测试',
                                 image=self.one_IPtest_img, compound='left', font=TITLE_FONT, foreground='#1296db')
@@ -112,19 +111,18 @@ class StartPage(ttk.Frame):
         self.one_iptest = StringVar()
         self.one_Ip_Entry = ttk.Entry(self, textvariable=self.one_iptest)
         self.one_scanning = ttk.Button(
-            self, text="测试",command=lambda: self.One_IPtest())
+            self, text="测试", command=lambda: self.One_IPtest())
 
         self.clear_views = ttk.Button(
-            self, text="清空",command=lambda: self.cleane_view())
+            self, text="清空", command=lambda: self.cleane_view())
 
         self.Stop_test = ttk.Button(
-            self, text="停止",command=lambda: self.Stop_Popen())
-
+            self, text="停止", command=lambda: self.Stop_Popen())
 
         self.choie_N = ttk.Label(self, text="选择测试次数：", compound='left')
         self.view_title = ttk.Label(self, text="测试结果", compound='left')
 
-        #stop_popen
+        # stop_popen
         self.stop_IPtest = StringVar()
         self.stop_IPtest.set('1')
 
@@ -132,9 +130,8 @@ class StartPage(ttk.Frame):
         self.count_IPtest = StringVar()
         self.country_one = ttk.Combobox(self, textvariable=self.count_IPtest)
         self.country_one.bind('<< ComboboxSelected >>', function)
-        self.country_one['values'] = ('2', '3', '4', '5','∞')
+        self.country_one['values'] = ('2', '3', '4', '5', '∞')
         self.count_IPtest.set('4')
-
 
         # 结果显示
         VERTICAL = "vertical"
@@ -144,55 +141,56 @@ class StartPage(ttk.Frame):
         self.Scanning_one['yscrollcommand'] = self.ScanViews_one.set
         ttk.Sizegrip().grid(column=2, row=4, sticky="se")
 
-
-
-        #布局
+        # 布局
         self.IPtest.grid(column=0, row=0, sticky="nwes", padx=5, pady=5)
         self.Ip_start.grid(column=1, row=1, sticky="nwes", padx=5, pady=5)
         self.one_Ip_Entry.grid(column=2, row=1, sticky="nwes", padx=5, pady=5)
         self.choie_N.grid(column=3, row=1, sticky="nwes", padx=5, pady=5)
         self.country_one.grid(column=4, row=1, sticky="nwes", padx=5, pady=5)
         self.one_scanning.grid(column=5, row=1, sticky="nwes", padx=5, pady=5)
-        self.view_title.grid(column=1, row=2, sticky="nwes",padx=5, pady=5)
+        self.view_title.grid(column=1, row=2, sticky="nwes", padx=5, pady=5)
         self.ScanViews_one.grid(column=21, row=3, sticky="ns")
-        self.Scanning_one.grid(column=1, row=3, sticky="nwes",columnspan=10,padx=5, pady=5)
-        self.Stop_test.grid(column=1, row=11, sticky="nwes",columnspan=1,rowspan=1,padx=5, pady=5)
-        self.clear_views.grid(column=10, row=11, sticky="nwes",columnspan=1,rowspan=1,padx=5, pady=5)
-    
+        self.Scanning_one.grid(
+            column=1, row=3, sticky="nwes", columnspan=10, padx=5, pady=5)
+        self.Stop_test.grid(column=1, row=11, sticky="nwes",
+                            columnspan=1, rowspan=1, padx=5, pady=5)
+        self.clear_views.grid(column=10, row=11, sticky="nwes",
+                              columnspan=1, rowspan=1, padx=5, pady=5)
 
-    #开始ping测试
+    # 开始ping测试
+
     def One_IPtest(self):
         """
         获取IP，开始Ping测试，结果实时输出到窗口
         """
-        one_ip = self.one_iptest.get()#获取IP
-        count_testnum=self.count_IPtest.get()#获取测试次数
-        control=self.stop_IPtest.get()
+        one_ip = self.one_iptest.get()  # 获取IP
+        count_testnum = self.count_IPtest.get()  # 获取测试次数
+        control = self.stop_IPtest.get()
         self.stop_IPtest.set('1')
-        if count_testnum=='∞':
-            add_num="ping -t "
+        if count_testnum == '∞':
+            add_num = "ping -t "
         else:
-            add_num="ping -n {0} ".format(count_testnum)
-        cmd=add_num+"{0}".format(one_ip)
-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell =True)
+            add_num = "ping -n {0} ".format(count_testnum)
+        cmd = add_num+"{0}".format(one_ip)
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT, shell=True)
         while p.poll() is None:
-                line = p.stdout.readline().decode('gbk')
-                line = line.strip()
-                control=self.stop_IPtest.get()
-                if line:
-                    test_out='Subprogram output: [{}]'.format(line)
-                    self.Scanning_one.insert('end',test_out)
-                    self.Scanning_one.update()
-                if control=='0':
-                        p.terminate()
-                
-    
+            line = p.stdout.readline().decode('gbk')
+            line = line.strip()
+            control = self.stop_IPtest.get()
+            if line:
+                test_out = 'Subprogram output: [{}]'.format(line)
+                self.Scanning_one.insert('end', test_out)
+                self.Scanning_one.update()
+            if control == '0':
+                p.terminate()
+                p.kill()
+
     def cleane_view(self):
-        self.Scanning_one.delete('0','end')
-    
+        self.Scanning_one.delete('0', 'end')
+
     def Stop_Popen(self):
         self.stop_IPtest.set('0')
-        
 
 
 class Network_scan(ttk.Frame):
@@ -349,11 +347,11 @@ class ALL_IPtest(ttk.Frame):
         self.IPtest = ttk.Label(self, text='自定义扫描',
                                 image=self.ALLIP_img, compound='left', font=TITLE_FONT, foreground='#1296db')
         self.Get_IPtxt = ttk.Button(
-            self, text="导入IP文件", image=self.infile_img, compound='left',command=lambda: self.start_ping()())
+            self, text="导入IP文件", image=self.infile_img, compound='left', command=lambda: self.start_ping()())
         self.Go_Scanning = ttk.Button(
             self, text="开始扫描", image=self.go_img, compound='left')
         self.Out_ScanningTxt = ttk.Button(
-            self, text="导出结果", image=self.outFile_img, compound='left',command=lambda: self.save_view())
+            self, text="导出结果", image=self.outFile_img, compound='left', command=lambda: self.save_view())
         self.TestView = ttk.Label(
             self, text='扫描结果：', font=TITLE_FONT, foreground='#1296db')
 
@@ -364,17 +362,19 @@ class ALL_IPtest(ttk.Frame):
             self, orient=VERTICAL, command=self.Scanning_L.yview)
         self.Scanning_L['yscrollcommand'] = self.ScanViews.set
         ttk.Sizegrip().grid(column=2, row=4, sticky="se")
-        self.Scanning_L.insert('end', 'IP地址               测试次数                通信状态')
-
-
+        self.Scanning_L.insert(
+            'end', 'IP地址               测试次数                通信状态')
 
         self.ScanViews.grid(column=21, row=3, sticky="ns")
-        self.Scanning_L.grid(column=1, row=3, sticky="nwes",columnspan=20,padx=5, pady=5)
+        self.Scanning_L.grid(column=1, row=3, sticky="nwes",
+                             columnspan=20, padx=5, pady=5)
         self.IPtest.grid(column=0, row=0, sticky="nwes", padx=5, pady=5)
-        self.Get_IPtxt.grid(column=1, row=1, sticky="nwes",columnspan=1,rowspan=1,padx=5, pady=5)
-        self.Go_Scanning.grid(column=2, row=1, sticky="nwes",columnspan=1,rowspan=1, padx=5, pady=5)
+        self.Get_IPtxt.grid(column=1, row=1, sticky="nwes",
+                            columnspan=1, rowspan=1, padx=5, pady=5)
+        self.Go_Scanning.grid(column=2, row=1, sticky="nwes",
+                              columnspan=1, rowspan=1, padx=5, pady=5)
         self.Out_ScanningTxt.grid(
-            column=20, row=20, sticky="nwes",columnspan=1,rowspan=1,padx=5, pady=5)
+            column=20, row=20, sticky="nwes", columnspan=1, rowspan=1, padx=5, pady=5)
         self.TestView.grid(column=1, row=2, sticky="nwes", padx=5, pady=5)
 
     # 获取IP
@@ -388,16 +388,17 @@ class ALL_IPtest(ttk.Frame):
             self.startip = f.readlines()
         return(self.startip)
     # 处理IP
+
     def start_ping(self):
         """
         启动多线程
         检查IP地址合法性
         """
-        get_ALLip=self.check_file()
+        get_ALLip = self.check_file()
         pthread_list = []
         for line in get_ALLip:
             if len(line.strip()):
-                ip=line.strip('\n')
+                ip = line.strip('\n')
                 pattern = r"((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))$)"
                 m = re.match(pattern, line)      # 检查IP地址是否合法
                 if m:
@@ -405,11 +406,12 @@ class ALL_IPtest(ttk.Frame):
                 else:
                     ip_check = False
                 # 开始测试
-                pthread_list.append(threading.Thread(target=self.get_ping_result, args=(ip,)))
+                pthread_list.append(threading.Thread(
+                    target=self.get_ping_result, args=(ip,)))
         for item in pthread_list:
             item.setDaemon(True)
             item.start()
-        with open('./IPtest.txt','w+') as f:
+        with open('./IPtest.txt', 'w+') as f:
             f.write("+---------------+----------+----------+\n")
             f.write("|    IP地址     |  扫描次数 |  通信情况 |\n")
             f.write("+---------------+----------+----------+\n")
@@ -435,25 +437,29 @@ class ALL_IPtest(ttk.Frame):
         result：线程ping的结果
         ip：为对于的IP地址
         """
-        ip=ip.strip('\n')
-        with open('./IPtest.txt','a+') as f:
+        ip = ip.strip('\n')
+        with open('./IPtest.txt', 'a+') as f:
             if result:
-                self.Scanning_L.insert('end', '%s               4               通信正常' % ip)
+                self.Scanning_L.insert(
+                    'end', '%s               4               通信正常' % ip)
                 f.write("|  {0}  |   4    |   通信正常  |\n".format(ip))
                 f.write("+---------------+----------+----------+\n")
                 self.Scanning_L.update()
             else:
-                self.Scanning_L.insert('end', '%s               4               通信失败' % ip)
+                self.Scanning_L.insert(
+                    'end', '%s               4               通信失败' % ip)
                 f.write("|  {0}  |   4    |   通信失败  |\n".format(ip))
                 f.write("+---------------+----------+----------+\n")
                 self.Scanning_L.update()
+
     def save_view(self):
-        r =asksaveasfilename(title='保存文件', initialdir='./', initialfile='table.txt')
-        with open('./IPtest.txt','r+') as f:
-            lines=f.read()
-        with open(r,'a+') as S:
+        r = asksaveasfilename(
+            title='保存文件', initialdir='./', initialfile='table.txt')
+        with open('./IPtest.txt', 'r+') as f:
+            lines = f.read()
+        with open(r, 'a+') as S:
             S.write(lines)
-        
+
 
 class About_page(ttk.Frame):
     """

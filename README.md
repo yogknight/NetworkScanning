@@ -17,15 +17,16 @@ cmd切换到项目目录运行`python TK_NetworkScanning.py`
 
 ## 使用编译免安装包
 下载压缩包解压后进入解压目录单击即可运行  
-[下载地址：NetworkScanning v0.1](https://pan.baidu.com/s/1iJiZjxN2GZ2JuHyp8jSukA)
+[下载地址：NetworkScanning v0.2](https://pan.baidu.com/s/1Tpjr791G7P0DgN8jI_YMyQ)
 
 ## 功能
 - [x] 单个网段IP地址扫描
 - [x] 自定义文本文件内IP地址扫描
 - [x] 导出扫描结果
-- [ ] 实时显示测试IP网络延迟
+- [x] 实时显示测试IP网络延迟
 
 ## 运行展示
+![单个IP地址扫描](https://raw.githubusercontent.com/Toykang/NetworkScanning/master/Doc_Image/main_page.PNG)
 ![单个网段IP地址扫描](https://raw.githubusercontent.com/Toykang/NetworkScanning/master/Doc_Image/IP_test.PNG)
 ![自定义文本文件内IP地址扫描](https://raw.githubusercontent.com/Toykang/NetworkScanning/master/Doc_Image/txt_IP_test.PNG)
 
