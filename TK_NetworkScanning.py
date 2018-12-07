@@ -1,4 +1,4 @@
-import re
+import re,os
 import subprocess
 import sys
 import threading
@@ -183,8 +183,8 @@ class StartPage(ttk.Frame):
                 self.Scanning_one.insert('end', test_out)
                 self.Scanning_one.update()
             if control == '0':
-                p.terminate()
-                p.kill()
+                cmd_close="taskkill /t /f /pid {0}".format(p.pid)
+                subprocess.Popen(cmd_close, stdout=subprocess.PIPE,stderr=subprocess.STDOUT, shell=True)
 
     def cleane_view(self):
         self.Scanning_one.delete('0', 'end')
