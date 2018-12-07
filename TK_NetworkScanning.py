@@ -174,7 +174,7 @@ class StartPage(ttk.Frame):
         else:
             add_num="ping -n {0} ".format(count_testnum)
         cmd=add_num+"{0}".format(one_ip)
-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell = False)
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell =True)
         while p.poll() is None:
                 line = p.stdout.readline().decode('gbk')
                 line = line.strip()
