@@ -169,9 +169,9 @@ class StartPage(ttk.Frame):
         control = self.stop_IPtest.get()
         self.stop_IPtest.set('1')
         if count_testnum == '∞':
-            add_num = "ping -t "
+            add_num = "ping -t -w 600 "
         else:
-            add_num = "ping -n {0} ".format(count_testnum)
+            add_num = "ping -n {0} -w 600 ".format(count_testnum)
         cmd = add_num+"{0}".format(one_ip)
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT, shell=True)
@@ -181,6 +181,7 @@ class StartPage(ttk.Frame):
                 cmd_close = "taskkill /t /f /pid {0}".format(p.pid)
                 subprocess.Popen(cmd_close, stdout=subprocess.PIPE,
                                  stderr=subprocess.STDOUT, shell=True)
+                break
             else:
                 line = p.stdout.readline().decode('gbk')
                 line = line.strip()
@@ -429,8 +430,13 @@ class ALL_IPtest(ttk.Frame):
                            check=True)  # 仅用于windows系统
         except subprocess.CalledProcessError as err:
             self.write_file(False, ip)
+            self.Scanning_L.insert(
+                    'end', '%s                      4                           通信失败' % ip)
         else:
             self.write_file(True, ip)
+            self.Scanning_L.insert(
+                    'end', '%s                     4                            通信正常' % ip)
+        self.Scanning_L.update()
 
     def write_file(self, result, ip):
         """
@@ -441,17 +447,11 @@ class ALL_IPtest(ttk.Frame):
         ip = ip.strip('\n')
         with open('./IPtest.txt', 'a+') as f:
             if result:
-                self.Scanning_L.insert(
-                    'end', '%s                     4                            通信正常' % ip)
                 f.write("|  {0}  |   4    |   通信正常  |\n".format(ip))
                 f.write("+---------------+----------+----------+\n")
-                self.Scanning_L.update()
             else:
-                self.Scanning_L.insert(
-                    'end', '%s                      4                           通信失败' % ip)
                 f.write("|  {0}  |   4    |   通信失败  |\n".format(ip))
                 f.write("+---------------+----------+----------+\n")
-                self.Scanning_L.update()
 
     def cleane_view(self):
         self.Scanning_L.delete('0', 'end')
