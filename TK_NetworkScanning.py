@@ -1,4 +1,5 @@
-import re,os
+import re
+import os
 import subprocess
 import sys
 import threading
@@ -175,16 +176,18 @@ class StartPage(ttk.Frame):
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT, shell=True)
         while p.poll() is None:
-            line = p.stdout.readline().decode('gbk')
-            line = line.strip()
             control = self.stop_IPtest.get()
-            if line:
-                test_out = 'Subprogram output: [{}]'.format(line)
-                self.Scanning_one.insert('end', test_out)
-                self.Scanning_one.update()
             if control == '0':
-                cmd_close="taskkill /t /f /pid {0}".format(p.pid)
-                subprocess.Popen(cmd_close, stdout=subprocess.PIPE,stderr=subprocess.STDOUT, shell=True)
+                cmd_close = "taskkill /t /f /pid {0}".format(p.pid)
+                subprocess.Popen(cmd_close, stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT, shell=True)
+            else:
+                line = p.stdout.readline().decode('gbk')
+                line = line.strip()
+                if line:
+                    test_out = 'System Print: [{}]'.format(line)
+                    self.Scanning_one.insert('end', test_out)
+                    self.Scanning_one.update()
 
     def cleane_view(self):
         self.Scanning_one.delete('0', 'end')
@@ -364,8 +367,6 @@ class ALL_IPtest(ttk.Frame):
             self, orient=VERTICAL, command=self.Scanning_L.yview)
         self.Scanning_L['yscrollcommand'] = self.ScanViews.set
         ttk.Sizegrip().grid(column=2, row=4, sticky="se")
-        self.Scanning_L.insert(
-            'end', 'IP地址               测试次数                通信状态')
 
         self.ScanViews.grid(column=21, row=3, sticky="ns")
         self.Scanning_L.grid(column=1, row=3, sticky="nwes",
@@ -400,15 +401,11 @@ class ALL_IPtest(ttk.Frame):
         """
         get_ALLip = self.check_file()
         pthread_list = []
+        self.Scanning_L.insert(
+            'end', 'IP地址                              测试次数                    通信状态')
         for line in get_ALLip:
             if len(line.strip()):
                 ip = line.strip('\n')
-                pattern = r"((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))$)"
-                m = re.match(pattern, line)      # 检查IP地址是否合法
-                if m:
-                    ip_check = True
-                else:
-                    ip_check = False
                 # 开始测试
                 pthread_list.append(threading.Thread(
                     target=self.get_ping_result, args=(ip,)))
@@ -445,16 +442,17 @@ class ALL_IPtest(ttk.Frame):
         with open('./IPtest.txt', 'a+') as f:
             if result:
                 self.Scanning_L.insert(
-                    'end', '%s               4               通信正常' % ip)
+                    'end', '%s                     4                            通信正常' % ip)
                 f.write("|  {0}  |   4    |   通信正常  |\n".format(ip))
                 f.write("+---------------+----------+----------+\n")
                 self.Scanning_L.update()
             else:
                 self.Scanning_L.insert(
-                    'end', '%s               4               通信失败' % ip)
+                    'end', '%s                      4                           通信失败' % ip)
                 f.write("|  {0}  |   4    |   通信失败  |\n".format(ip))
                 f.write("+---------------+----------+----------+\n")
                 self.Scanning_L.update()
+
     def cleane_view(self):
         self.Scanning_L.delete('0', 'end')
 

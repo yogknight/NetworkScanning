@@ -18,7 +18,7 @@ cmd切换到项目目录运行`python TK_NetworkScanning.py`
 ## 使用编译免安装包
 下载压缩包解压后进入解压目录单击即可运行  
 [下载地址：NetworkScanning v0.1](https://pan.baidu.com/s/1agUzUNzKfeZ7Fb8Im1ddpg)  
-[下载地址：NetworkScanning v0.1.1](https://pan.baidu.com/s/16msWQUSOue2TehwS5mmtWQ)
+[下载地址：NetworkScanning v0.1.1](https://pan.baidu.com/s/1LFie2lr62-HnIGAz57400A)
 
 ## 功能
 - [x] 单个网段IP地址扫描
