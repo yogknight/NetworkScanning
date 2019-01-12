@@ -25,6 +25,9 @@ cmd切换到项目目录运行`python TK_NetworkScanning.py`
 - [x] 自定义文本文件内IP地址扫描
 - [x] 导出扫描结果
 - [x] 实时显示测试IP网络延迟
+### 新版修改
+- [x] 显示测试时间
+- [x] 增加结果查询功能
 
 ## 运行展示
 ![单个IP地址扫描](https://raw.githubusercontent.com/Toykang/NetworkScanning/master/Doc_Image/main_page.PNG)
@@ -32,24 +35,4 @@ cmd切换到项目目录运行`python TK_NetworkScanning.py`
 ![自定义文本文件内IP地址扫描](https://raw.githubusercontent.com/Toykang/NetworkScanning/master/Doc_Image/txt_IP_test.PNG)
 
 ## LICENSE
-MIT License
-
-Copyright (c) 2018 Toykang
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+[License file](https://github.com/Toykang/NetworkScanning/blob/master/LICENSE)

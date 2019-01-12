@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 import threading
+import datetime
 import webbrowser
 from tkinter import Menu, Tk, messagebox, ttk, StringVar, Listbox
 from tkinter.filedialog import askopenfilename, asksaveasfilename
@@ -186,7 +187,8 @@ class StartPage(ttk.Frame):
                 line = p.stdout.readline().decode('gbk')
                 line = line.strip()
                 if line:
-                    test_out = 'System Print: [{}]'.format(line)
+                    time_out=datetime.datetime.now()
+                    test_out =str(time_out)+':      [{0}]'.format(line)
                     self.Scanning_one.insert('end', test_out)
                     self.Scanning_one.update()
 
@@ -393,8 +395,9 @@ class ALL_IPtest(ttk.Frame):
         with open(self.open_filename, 'r') as f:
             self.startip = f.readlines()
         return(self.startip)
+    
+    
     # 处理IP
-
     def start_ping(self):
         """
         启动多线程
@@ -403,7 +406,7 @@ class ALL_IPtest(ttk.Frame):
         get_ALLip = self.check_file()
         pthread_list = []
         self.Scanning_L.insert(
-            'end', 'IP地址                              测试次数                    通信状态')
+            'end', '时间                                                            IP地址                              测试次数                    通信状态')
         for line in get_ALLip:
             if len(line.strip()):
                 ip = line.strip('\n')
@@ -414,9 +417,9 @@ class ALL_IPtest(ttk.Frame):
             item.setDaemon(True)
             item.start()
         with open('./IPtest.txt', 'w+') as f:
-            f.write("+---------------+----------+----------+\n")
-            f.write("|    IP地址     |  扫描次数 |  通信情况 |\n")
-            f.write("+---------------+----------+----------+\n")
+            f.write("+------------------------------+---------------+----------------+----------+\n")
+            f.write("|                  时间                    |        IP地址         |    扫描次数   |  通信情况 |\n")
+            f.write("+------------------------------+---------------+----------------+----------+\n")
         f.close()
 
     def get_ping_result(self, ip):
@@ -425,17 +428,18 @@ class ALL_IPtest(ttk.Frame):
         """
         cmd_str = "ping {0} -n 4 -w 600".format(ip)
         DETACHED_PROCESS = 0x00000008   # 不创建cmd窗口
+        time_now=datetime.datetime.now()
         try:
             subprocess.run(cmd_str, creationflags=DETACHED_PROCESS,
                            check=True)  # 仅用于windows系统
         except subprocess.CalledProcessError as err:
             self.write_file(False, ip)
             self.Scanning_L.insert(
-                    'end', '%s                      4                           通信失败' % ip)
+                    'end', '%s                       %s                      4                           通信失败' % (str(time_now),ip))
         else:
             self.write_file(True, ip)
             self.Scanning_L.insert(
-                    'end', '%s                     4                            通信正常' % ip)
+                    'end', '%s                       %s                     4                            通信正常' % (str(time_now),ip))
         self.Scanning_L.update()
 
     def write_file(self, result, ip):
@@ -445,13 +449,14 @@ class ALL_IPtest(ttk.Frame):
         ip：为对于的IP地址
         """
         ip = ip.strip('\n')
+        time_wr=datetime.datetime.now()
         with open('./IPtest.txt', 'a+') as f:
             if result:
-                f.write("|  {0}  |   4    |   通信正常  |\n".format(ip))
-                f.write("+---------------+----------+----------+\n")
+                f.write("| "+str(time_wr)+" |   {0}    |      4        |   通信正常  |\n".format(ip))
+                f.write("+------------------------------+---------------+----------+----------+\n")
             else:
-                f.write("|  {0}  |   4    |   通信失败  |\n".format(ip))
-                f.write("+---------------+----------+----------+\n")
+                f.write("| "+str(time_wr)+" |   {0}    |       4       |   通信失败  |\n".format(ip))
+                f.write("+------------------------------+---------------+----------+----------+\n")
 
     def cleane_view(self):
         self.Scanning_L.delete('0', 'end')
