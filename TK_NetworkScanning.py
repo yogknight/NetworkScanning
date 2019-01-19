@@ -15,14 +15,14 @@ FALSE = False
 function = 'function'
 
 # images
-img_about = Image.open('about_img.png')
-img_IPtest = Image.open('IPtest_img.png')
-img_Github = Image.open('GitHub_img.png')
-img_ALL_IPimg = Image.open('ALL_IP_img.png')
-img_infile = Image.open('infile_img.png')
-img_outFile = Image.open('outFile_img.png')
-img_go = Image.open('go_img.png')
-img_one_IPtes = Image.open('one_IPtest_img.png')
+img_about = Image.open('./Images/about_img.png')
+img_IPtest = Image.open('./Images/IPtest_img.png')
+img_Github = Image.open('./Images/GitHub_img.png')
+img_ALL_IPimg = Image.open('./Images/ALL_IP_img.png')
+img_infile = Image.open('./Images/infile_img.png')
+img_outFile = Image.open('./Images/outFile_img.png')
+img_go = Image.open('./Images/go_img.png')
+img_one_IPtes = Image.open('./Images/one_IPtest_img.png')
 
 # 定义图片尺寸
 about_image = img_about.resize((60, 60), Image.ANTIALIAS)
@@ -49,7 +49,7 @@ class Network_Test(Tk):
         mainframe = ttk.Frame(self, padding=(3, 3, 12, 12),
                               borderwidth=2, relief='sunken')
         self.resizable(width=False, height=False)  # 禁止拉升窗口
-        self.iconbitmap(".\\app_ico.ico")
+        self.iconbitmap(".\\Images\\app_ico.ico")
         mainframe.grid(column=0, row=0, sticky="nwes")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
