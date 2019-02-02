@@ -167,7 +167,6 @@ class StartPage(ttk.Frame):
         """
         one_ip = self.one_iptest.get()  # 获取IP
         count_testnum = self.count_IPtest.get()  # 获取测试次数
-        control = self.stop_IPtest.get()
         self.stop_IPtest.set('1')
         if count_testnum == '∞':
             add_num = "ping -t -w 600 "
@@ -184,11 +183,10 @@ class StartPage(ttk.Frame):
                                  stderr=subprocess.STDOUT, shell=True)
                 break
             else:
-                line = p.stdout.readline().decode('gbk')
-                line = line.strip()
+                line = p.stdout.readline().strip().decode('gbk')
                 if line:
-                    time_out=datetime.datetime.now()
-                    test_out =str(time_out)+':      [{0}]'.format(line)
+                    time_out=str(datetime.datetime.now())
+                    test_out=time_out+'：'+line
                     self.Scanning_one.insert('end', test_out)
                     self.Scanning_one.update()
 
