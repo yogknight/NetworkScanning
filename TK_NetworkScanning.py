@@ -7,7 +7,7 @@ import datetime
 import webbrowser
 from tkinter import Menu, Tk, messagebox, ttk, StringVar, Listbox
 from tkinter.filedialog import askopenfilename, asksaveasfilename
-
+import xlwt
 from PIL import Image, ImageTk
 
 TITLE_FONT = ("Helvetica", 16, "bold")
@@ -15,9 +15,7 @@ FALSE = False
 function = 'function'
 
 # images
-img_about = Image.open('./Images/about_img.png')
 img_IPtest = Image.open('./Images/IPtest_img.png')
-img_Github = Image.open('./Images/GitHub_img.png')
 img_ALL_IPimg = Image.open('./Images/ALL_IP_img.png')
 img_infile = Image.open('./Images/infile_img.png')
 img_outFile = Image.open('./Images/outFile_img.png')
@@ -25,9 +23,7 @@ img_go = Image.open('./Images/go_img.png')
 img_one_IPtes = Image.open('./Images/one_IPtest_img.png')
 
 # 定义图片尺寸
-about_image = img_about.resize((60, 60), Image.ANTIALIAS)
 IPtest_image = img_IPtest.resize((60, 60), Image.ANTIALIAS)
-Github_image = img_Github.resize((10, 10), Image.ANTIALIAS)
 ALL_IPimg_image = img_ALL_IPimg.resize((60, 60), Image.ANTIALIAS)
 one_IPtest_image = img_one_IPtes.resize((60, 60), Image.ANTIALIAS)
 
@@ -63,7 +59,7 @@ class Network_Test(Tk):
             self.big.append(tc)
         # self.geometry("600x300")
         self.frames = {}
-        for F in (StartPage, Network_scan, About_page, ALL_IPtest):
+        for F in (StartPage, Network_scan, ALL_IPtest):
             page_name = F.__name__
             frame = F(parent=mainframe, mainframe=self)
             self.frames[page_name] = frame
@@ -98,7 +94,7 @@ class StartPage(ttk.Frame):
         menu_tools.add_command(label='IP地址测试(IP Test)',
                                command=lambda: mainframe.show_frame("StartPage"))
         menu_help.add_command(
-            label='关于(About)', command=lambda: mainframe.show_frame("About_page"))
+            label='关于(About)', command=lambda: self.About_view())
         menu_tools.add_command(label='网段扫描(Network scanning)',
                                command=lambda: mainframe.show_frame("Network_scan"))
         menu_tools.add_command(label='自定义扫描(Auto Test)',
@@ -185,8 +181,8 @@ class StartPage(ttk.Frame):
             else:
                 line = p.stdout.readline().strip().decode('gbk')
                 if line:
-                    time_out=str(datetime.datetime.now())
-                    test_out=time_out+'：'+line
+                    time_out = str(datetime.datetime.now())
+                    test_out = time_out+'：'+line
                     self.Scanning_one.insert('end', test_out)
                     self.Scanning_one.update()
 
@@ -195,6 +191,13 @@ class StartPage(ttk.Frame):
 
     def Stop_Popen(self):
         self.stop_IPtest.set('0')
+
+    def About_view(self):
+        messagebox.showinfo('网络测试', """    版本: 0.2
+    日期: 2019-02-05 11:30
+    Python: 3.7.0
+    源码发布于: https://github.com/Toykang/NetworkScanning
+    """)
 
 
 class Network_scan(ttk.Frame):
@@ -361,6 +364,7 @@ class ALL_IPtest(ttk.Frame):
         self.TestView = ttk.Label(
             self, text='扫描结果：', font=TITLE_FONT, foreground='#1296db')
 
+        self.ping_test = []
         # 结果显示
         VERTICAL = "vertical"
         self.Scanning_L = Listbox(self, height=20, width=100)
@@ -393,9 +397,9 @@ class ALL_IPtest(ttk.Frame):
         with open(self.open_filename, 'r') as f:
             self.startip = f.readlines()
         return(self.startip)
-    
-    
+
     # 处理IP
+
     def start_ping(self):
         """
         启动多线程
@@ -403,6 +407,7 @@ class ALL_IPtest(ttk.Frame):
         """
         get_ALLip = self.check_file()
         pthread_list = []
+
         self.Scanning_L.insert(
             'end', '时间                                                            IP地址                              测试次数                    通信状态')
         for line in get_ALLip:
@@ -414,11 +419,7 @@ class ALL_IPtest(ttk.Frame):
         for item in pthread_list:
             item.setDaemon(True)
             item.start()
-        with open('./IPtest.txt', 'w+') as f:
-            f.write("+------------------------------+---------------+----------------+----------+\n")
-            f.write("|                  时间                    |        IP地址         |    扫描次数   |  通信情况 |\n")
-            f.write("+------------------------------+---------------+----------------+----------+\n")
-        f.close()
+        self.ping_test = [['时间', 'IP地址', 'Ping次数', '通信情况']]
 
     def get_ping_result(self, ip):
         """
@@ -426,78 +427,35 @@ class ALL_IPtest(ttk.Frame):
         """
         cmd_str = "ping {0} -n 4 -w 600".format(ip)
         DETACHED_PROCESS = 0x00000008   # 不创建cmd窗口
-        time_now=datetime.datetime.now()
+        time_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         try:
             subprocess.run(cmd_str, creationflags=DETACHED_PROCESS,
                            check=True)  # 仅用于windows系统
         except subprocess.CalledProcessError as err:
-            self.write_file(False, ip)
             self.Scanning_L.insert(
-                    'end', '%s                       %s                      4                           通信失败' % (str(time_now),ip))
+                'end', '%s                       %s                      4                           通信失败' % (str(time_now), ip))
+            self.ping_test.append([time_now, ip, 4, '通信失败'])
         else:
-            self.write_file(True, ip)
+            self.ping_test.append([time_now, ip, 4, '通信正常'])
             self.Scanning_L.insert(
-                    'end', '%s                       %s                     4                            通信正常' % (str(time_now),ip))
+                'end', '%s                       %s                     4                            通信正常' % (str(time_now), ip))
         self.Scanning_L.update()
-
-    def write_file(self, result, ip):
-        """
-        将结果写入文件
-        result：线程ping的结果
-        ip：为对于的IP地址
-        """
-        ip = ip.strip('\n')
-        time_wr=datetime.datetime.now()
-        with open('./IPtest.txt', 'a+') as f:
-            if result:
-                f.write("| "+str(time_wr)+" |   {0}    |      4        |   通信正常  |\n".format(ip))
-                f.write("+------------------------------+---------------+----------+----------+\n")
-            else:
-                f.write("| "+str(time_wr)+" |   {0}    |       4       |   通信失败  |\n".format(ip))
-                f.write("+------------------------------+---------------+----------+----------+\n")
 
     def cleane_view(self):
         self.Scanning_L.delete('0', 'end')
 
     def save_view(self):
-        r = asksaveasfilename(
-            title='保存文件', initialdir='./', initialfile='table.txt')
-        with open('./IPtest.txt', 'r+') as f:
-            lines = f.read()
-        with open(r, 'a+') as S:
-            S.write(lines)
-
-
-class About_page(ttk.Frame):
-    """
-    关于APP的详细信息
-    """
-
-    def __init__(self, parent, mainframe):
-        ttk.Frame.__init__(self, parent)
-        self.mainframe = mainframe
-        self.about_img = ImageTk.PhotoImage(about_image)
-        self.Github_img = ImageTk.PhotoImage(Github_image)
-        self.About = ttk.Label(
-            self, text='关于', image=self.about_img, compound='left', font=TITLE_FONT, foreground='#1296db')
-        self.About_info1 = ttk.Label(self, text='版本：0.1(Toykang)')
-        self.About_info2 = ttk.Label(self, text='提交：1')
-        self.About_info3 = ttk.Label(
-            self, text='日期：2018, 12, 3, 14, 27, 9, 402166 ')
-        self.About_info4 = ttk.Label(self, text='源码：源码发布于GiHub，更多详细信息请点击')
-
-        self.About_source = ttk.Button(
-            self, image=self.Github_img, command=lambda: self.web_view())
-
-        self.About.grid(column=0, row=0, sticky="nwes", padx=5, pady=5)
-        self.About_info1.grid(column=1, row=1, sticky="nwes", padx=5, pady=5)
-        self.About_info2.grid(column=1, row=2, sticky="nwes", padx=5, pady=5)
-        self.About_info3.grid(column=1, row=3, sticky="nwes", padx=5, pady=5)
-        self.About_info4.grid(column=1, row=4, sticky="nwes", padx=5, pady=5)
-        self.About_source.grid(column=2, row=4, sticky="nwes", padx=5, pady=5)
-
-    def web_view(self):
-        webbrowser.open("https://github.com/Toykang/NetworkScanning")
+        PingTest = xlwt.Workbook()  # 新建一个excel
+        sheet = PingTest.add_sheet('Ping测试数据结果')  # 添加一个sheet页
+        row = 0  # 控制行
+        for stu in self.ping_test:
+            col = 0  # 控制列
+            for s in stu:  # 再循环里面list的值，每一列
+                sheet.write(row, col, s)
+                col += 1
+            row += 1
+        PingTest.save('Ping测试数据结果.xls')  # 保存到当前目录下
+        messagebox.showinfo('提示', '数据已导出到程序可执行文件目录下的(Ping测试数据结果.xls)文件中！')
 
 
 if __name__ == "__main__":
